@@ -28,7 +28,7 @@ describe Post do
     @posts.first[:url].should eq("2009-01-23-first-post.html")
   end
   
-  it "finds the post by url" do
+  it "finds the post by id" do
     id = "0"
     @post = Post.find(id)
     @post[:title].should eq("First post")
