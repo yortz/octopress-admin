@@ -1,7 +1,7 @@
 class Post
   YML = File.join(Rails.root,"config","config.yml")
   include ActiveAttr::Model
-  
+
   attribute :name
   attribute :content
   attribute :published
@@ -18,8 +18,18 @@ class Post
                   title: File.basename(file).split(/- */, 4).last.capitalize.gsub!(/\.html/, "").gsub!(/-/, " "), 
                   url: File.basename(file)}
     end
-    #@posts.each {|p| puts p}
     return @posts
+  end
+  
+  def self.find(id)
+    @posts = self.all
+    @posts.find do |p|
+      if p[:id]  == id.to_i
+        @post = p
+      else
+        puts "There is no Post with id => #{id.to_s}"
+      end 
+    end
   end
   
   def self.load_config(config=YML)

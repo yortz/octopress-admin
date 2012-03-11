@@ -23,7 +23,17 @@ describe "Posts" do
     page.should have_content("Listing Posts")
     within("table") do
       page.should have_content("First post")
+      page.should have_content("2009/01/23")
+      page.should have_content("2009-01-23-first-post.html")
     end
   end
   
+  it "shows post" do
+    login(user.email, user.password)
+    page.should have_content("Listing Posts")
+    within("table/tr[2]/td[4]") do
+      click_link("Show")
+    end
+    page.should have_content("First post")
+  end
 end
