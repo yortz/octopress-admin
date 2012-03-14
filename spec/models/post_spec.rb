@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Post do
-  
   it "initializes config yml" do
     config = Post.load_config(Post::YML)
     config[Rails.env]["relative_blog_path"].should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source") 
@@ -32,6 +31,6 @@ describe Post do
     id = "0"
     @post = Post.find(id)
     @post[:title].should eq("First post")
-    end
+  end
   
 end

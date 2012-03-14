@@ -1,6 +1,6 @@
 # The rails root relative path to your blog (for loading Jekyll's _config.yml)
 development:
-  relative_blog_path: /Users/yortz/projects/colorsoflife/source/
+  relative_blog_path: /Users/yortz/projects/colorsoflife/source
   posts_path: _posts
   
 test:

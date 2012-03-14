@@ -16,7 +16,7 @@ class Post
       @posts << { id: i,
                   date: File.basename(file).scan(/\d+-/).join("/").gsub!(/-/,""),
                   title: File.basename(file).split(/- */, 4).last.capitalize.gsub!(/\.html/, "").gsub!(/-/, " "), 
-                  url: File.basename(file)}
+                  url: [@dir, File.basename(file)].join("/")}
     end
     return @posts
   end
@@ -31,6 +31,7 @@ class Post
       end 
     end
   end
+  
   
   def self.load_config(config=YML)
     @config = YAML.load_file(config)
