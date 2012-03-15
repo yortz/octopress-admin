@@ -1,14 +1,27 @@
 class Post
   YML = File.join(Rails.root,"config","config.yml")
-  include ActiveAttr::Model
-
-  attribute :name
-  attribute :content
-  attribute :published
-  attribute :date
-  attribute :url
   
-  validates_presence_of :name, :content, :published
+  include ActiveAttr::BasicModel
+  include ActiveAttr::Attributes
+  include ActiveAttr::AttributeDefaults
+  include ActiveAttr::QueryAttributes
+  include ActiveAttr::TypecastedAttributes
+  include ActiveAttr::MassAssignment
+  
+  # attr_accessor :name, :content, :date, :url
+
+  attribute :name, :type => String
+  attribute :content, :type => String
+  attribute :published, :default => 0, :type => Integer
+  attribute :date, :type => String
+  attribute :url, :type => String
+  # Layout params
+  attribute :categories, :type => String
+  attribute :tags, :type => String
+  attribute :comments, :default => 1, :type => Integer
+  attribute :rss, :default => 1, :type => Integer
+  
+  validates_presence_of :name, :content, :published, :categories, :tags
   
   def self.all
     @posts = []
@@ -32,6 +45,25 @@ class Post
     end
   end
   
+  def save
+    filename = "#{self.url}/#{self.date}-#{self.name.to_url}.html"
+    unless File.exist?(filename)
+      #puts "Creating new post: #{filename}"
+      open(filename, 'w') do |post|
+        post.puts "---"
+        post.puts "layout: post"
+        post.puts "title: \"#{self.name.gsub(/&/,'&amp;')}\""
+        post.puts "date: #{self.date}"
+        post.puts self.comments == 1 ? "comments: true" : "comments: false"
+        post.puts self.rss == 1 ? "rss: true" : "rss: false"
+        post.puts "categories: #{self.categories}"
+        post.puts "tags:\n- #{self.tags.gsub(/,/, "\n-")}"
+        post.puts "---"
+        post.puts "\n"
+        post.puts "#{self.content}"
+      end
+    end
+  end
   
   def self.load_config(config=YML)
     @config = YAML.load_file(config)
