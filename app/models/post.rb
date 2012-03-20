@@ -69,6 +69,12 @@ class Post
     @config = YAML.load_file(config)
   end
   
+  def self.load_categories
+      @categories = []
+     [@config["categories"]].each { |category| category.each {|h| h.each {|k,v| @categories << v } }}
+     return @categories
+  end
+  
   def self.load_path
     @dir = [@config[Rails.env]["relative_blog_path"], @config[Rails.env]["posts_path"]].join("/")
   end

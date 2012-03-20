@@ -3,6 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe "Posts" do
   let(:user)  { Factory(:user) }
   
+  before(:each) do
+    Post.load_config(Post::YML)
+    generate_posts(Post.load_path)
+  end
+  
+  after(:each) do
+    delete_posts(Post.load_path)
+  end
+  
   it "protects from unauthorized access" do
     visit(posts_path)
     current_path.should eq(login_path)
@@ -35,5 +44,13 @@ describe "Posts" do
       click_link("Show")
     end
     page.should have_content("First post")
+  end
+  
+  it "creates new post" do
+    login(user.email, user.password)
+    page.should have_content("Listing Posts")
+    click_link("New Post")
+    page.should have_content("New post")
+    fill_in 'name', :with => 'New post'
   end
 end

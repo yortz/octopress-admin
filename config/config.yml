@@ -6,3 +6,8 @@ development:
 test:
   relative_blog_path: /Users/yortz/projects/octopress-admin/spec/data/blog/source
   posts_path: _posts
+  
+categories:
+  - category_1: events
+  - category_2: news
+  - category_3: photocontest

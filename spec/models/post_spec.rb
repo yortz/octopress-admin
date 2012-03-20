@@ -23,6 +23,12 @@ describe Post do
       path.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts")
     end
     
+    it "initializes the categories from the config file" do
+      categories = Post.load_categories
+      categories[1].should eq("news")
+      categories.size.should eq(3)
+    end
+    
   end
   
   context "Post" do
@@ -52,18 +58,20 @@ describe Post do
     end
   
     it "creates new post" do
-      new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "events", "great, awesome, even better")
+      @categories = Post.load_categories
+      new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "#{@categories.last}", "great, awesome, even better")
       @post.name.should eq("new post")
       @post.date.should eq("2001-03-14")
       @post.content.should eq("<p>This is a <a href=\"http://google.com\">link<a/> post</p>")
       @post.published.should eq(0)
       @post.url.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts")
-      @post.categories.should eq("events")
+      @post.categories.should eq("photocontest")
       @post.tags.should eq("great, awesome, even better")
     end
   
     it "saves new post and creates the post in the correct folder" do
-      new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "events", "great, awesome, even better")
+      @categories = Post.load_categories
+      new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "#{@categories.first}", "great, awesome, even better")
       @post.save
       @post = Post.find(0)
       @post[:title].should eq("New post")
