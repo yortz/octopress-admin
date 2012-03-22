@@ -13,7 +13,9 @@ class Post
   attribute :name, :type => String
   attribute :content, :type => String
   attribute :published, :default => 0, :type => Integer
-  attribute :date, :type => String
+  attribute :year, :type => Integer
+  attribute :month, :type => Integer
+  attribute :day, :type => Integer
   attribute :url, :type => String
   # Layout params
   attribute :categories, :type => String
@@ -21,7 +23,11 @@ class Post
   attribute :comments, :default => 1, :type => Integer
   attribute :rss, :default => 1, :type => Integer
   
-  validates_presence_of :name, :content, :published, :categories, :tags
+  validates_presence_of :name, :content, :categories, :tags, :year, :month, :day
+  
+  def date
+    [self.year, (sprintf '%02d', self.month), (sprintf '%02d', self.day)].join("-")
+  end
   
   def self.all
     @posts = []
@@ -48,7 +54,7 @@ class Post
   def save
     filename = "#{self.url}/#{self.date}-#{self.name.to_url}.html"
     unless File.exist?(filename)
-      #puts "Creating new post: #{filename}"
+      puts "Creating new post: #{filename}"
       open(filename, 'w') do |post|
         post.puts "---"
         post.puts "layout: post"
@@ -70,7 +76,7 @@ class Post
   end
   
   def self.load_categories
-      @categories = []
+     @categories = []
      [@config["categories"]].each { |category| category.each {|h| h.each {|k,v| @categories << v } }}
      return @categories
   end

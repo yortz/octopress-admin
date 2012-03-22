@@ -67,7 +67,7 @@ content: %Q{<h1>Third post</h1>
   end
   
   def new_post(name, date, content, categories, tags)
-    @post = Post.new( :name => name, :date => date, :content => content, :url => Post.load_path, :categories => categories, :tags => tags )
+    @post = Post.new( :name => name, :year => date.split("-").first, :month => date.split("-")[1], :day => date.split("-").last, :content => content, :url => Post.load_path, :categories => categories, :tags => tags )
   end
   
 end

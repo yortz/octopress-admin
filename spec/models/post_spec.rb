@@ -5,7 +5,9 @@ describe Post do
   context "Post Configuration" do
     
     it  { should have_attribute(:name).of_type(String) }
-    it  { should have_attribute(:date).of_type(String) }
+    it  { should have_attribute(:year).of_type(Integer) }
+    it  { should have_attribute(:month).of_type(Integer) }
+    it  { should have_attribute(:day).of_type(Integer) }
     it  { should have_attribute(:url).of_type(String) }
     it  { should have_attribute(:published).of_type(Integer).with_default_value_of(0) }
     it  { should have_attribute(:categories).of_type(String) }

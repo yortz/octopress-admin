@@ -46,11 +46,34 @@ describe "Posts" do
     page.should have_content("First post")
   end
   
-  it "creates new post" do
+  it "shows new post" do
     login(user.email, user.password)
     page.should have_content("Listing Posts")
     click_link("New Post")
     page.should have_content("New post")
-    fill_in 'name', :with => 'New post'
+    page.should have_content(Time.now.year)
+    page.should have_content(Time.now.month)
+    page.should have_content(Time.now.day)
+    find("#post_published")[:checked].should eq(false)
+    find("#post_comments")[:checked].should eq(true)
+    find("#post_rss")[:checked].should eq(true)
+  end
+  
+  it "creates post" do
+    login(user.email, user.password)
+    click_link("New Post")
+    fill_in 'Name', :with => 'My new post title'
+    fill_in 'Content', :with => '<p>Some dummy content with <a href="http://google.com" target="_blank">link.</a></p>'
+    fill_in 'Tags', :with => "tag1, tag2, tag3"
+    select '2012', :from => 'post[date(1i)]'
+    select '6', :from => 'post[date(2i)]'
+    select '22', :from => 'post[date(3i)]'
+    select 'photocontest', :from => 'Categories'
+    click_button 'Create Post'
+    #@post.name.should eq("My new post title")
+    # page.should have_content("First post")
+    # page.should have_content("Second post")
+    # page.should have_content("Third post")
+    # page.should have_content("My new post title")
   end
 end
