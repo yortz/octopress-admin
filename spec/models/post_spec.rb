@@ -78,6 +78,7 @@ describe Post do
       @post = Post.find(0)
       @post[:title].should eq("New post")
     end
+    
   end
   
 end

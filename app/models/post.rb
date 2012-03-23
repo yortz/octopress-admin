@@ -25,6 +25,13 @@ class Post
   
   validates_presence_of :name, :content, :categories, :tags, :year, :month, :day
   
+  def initialize(attributes = {})
+    super
+    Post.load_config
+    @url = Post.load_path
+    self.url = @url
+  end
+  
   def date
     [self.year, (sprintf '%02d', self.month), (sprintf '%02d', self.day)].join("-")
   end
