@@ -4,6 +4,7 @@ describe Post do
   
   context "Post Configuration" do
     
+    it  { should have_attribute(:id).of_type(Integer) }
     it  { should have_attribute(:name).of_type(String) }
     it  { should have_attribute(:year).of_type(Integer) }
     it  { should have_attribute(:month).of_type(Integer) }
@@ -56,7 +57,9 @@ describe Post do
     it "finds the post by id" do
       id = "0"
       @post = Post.find(id)
-      @post[:title].should eq("First post")
+      @post.name.should eq("First post")
+      @post.id.should eq(0)
+      @post.url.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2009-01-23-first-post.html")
     end
   
     it "creates new post" do
@@ -76,7 +79,14 @@ describe Post do
       new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "#{@categories.first}", "great, awesome, even better")
       @post.save
       @post = Post.find(0)
-      @post[:title].should eq("New post")
+      @post.name.should eq("New post")
+    end
+    
+    it "deletes an unpuplished post" do
+      @post = Post.find(1)
+      @post.destroy
+      get_posts
+      @posts.count.should eq(2)
     end
     
   end

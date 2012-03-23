@@ -9,7 +9,8 @@ class Post
   include ActiveAttr::MassAssignment
   
   # attr_accessor :name, :content, :date, :url
-
+  
+  attribute :id, :type => Integer
   attribute :name, :type => String
   attribute :content, :type => String
   attribute :published, :default => 0, :type => Integer
@@ -51,17 +52,22 @@ class Post
     @posts = self.all
     @posts.find do |p|
       if p[:id]  == id.to_i
-        @post = p
-      else
-        puts "There is no Post with id => #{id.to_s}"
-      end 
+        @post = Post.new
+        @post.url = [@post.url, p[:url].gsub!(/(\/)+(\D*)/, "")].join("/")
+        @post.id = p[:id].to_i
+        @post.year = p[:date].split("-").first
+        @post.month = p[:date].split("-")[1]
+        @post.day = p[:date].split("-").last
+        @post.name = p[:title]
+        return @post
+      end
     end
   end
   
   def save
     filename = "#{self.url}/#{self.date}-#{self.name.to_url}.html"
     unless File.exist?(filename)
-      puts "Creating new post: #{filename}"
+      #puts "Creating new post: #{filename}"
       open(filename, 'w') do |post|
         post.puts "---"
         post.puts "layout: post"
@@ -76,6 +82,11 @@ class Post
         post.puts "#{self.content}"
       end
     end
+  end
+  
+  def destroy
+    #puts "Deleting post: #{self.url}"
+    File.delete(self.url)
   end
   
   def self.load_config(config=YML)

@@ -70,10 +70,10 @@ describe "Posts" do
     select '22', :from => 'post[day]'
     select 'photocontest', :from => 'Categories'
     click_button 'Create Post'
-    #@post.name.should eq("My new post title")
-    # page.should have_content("First post")
-    # page.should have_content("Second post")
-    # page.should have_content("Third post")
-    # page.should have_content("My new post title")
+    within("table") do
+      page.should have_content("My new post title")
+      page.should have_content("2012/06/22")
+      page.should have_content("2012-06-22-my-new-post-title.html")
+    end
   end
 end
