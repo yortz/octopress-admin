@@ -14,9 +14,9 @@
     <td><%= post[:date] %></td>
     <td><%= post[:title] %></td>
     <td><%= post[:url] %></td>
-    <td><%= link_to 'Show', :controller => "posts", :action => "show", :id => post[:id] %></td>
+    <td><%= link_to 'Show', post_path(post) %></td>
     <td><%= link_to 'Edit', edit_post_path(post[:url]) %></td>
-    <td><%= link_to 'Destroy', post[:url], confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Delete', post_path(post), confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

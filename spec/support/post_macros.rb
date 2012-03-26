@@ -37,6 +37,18 @@ tags:
 content: %Q{<h1>Third post</h1>
 <p>This is the third post</p>}}]]
 
+  def create_post
+    click_link("New Post")
+    fill_in 'Name', :with => 'My new post title'
+    fill_in 'Content', :with => '<p>Some dummy content with <a href="http://google.com" target="_blank">link.</a></p>'
+    fill_in 'Tags', :with => "tag1, tag2, tag3"
+    select '2012', :from => 'post[year]'
+    select '6', :from => 'post[month]'
+    select '22', :from => 'post[day]'
+    select 'photocontest', :from => 'Categories'
+    click_button 'Create Post'
+  end
+
   def generate_posts(path)
     POSTS.each do |post|
       filename = "#{path}/#{post.first}"

@@ -24,4 +24,5 @@ gem "rspec-rails", "~> 2.6", :group => [:test, :development]
 group :test do
   gem 'capybara'
   gem "factory_girl_rails"
+  gem 'launchy'
 end

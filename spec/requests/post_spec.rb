@@ -61,19 +61,23 @@ describe "Posts" do
   
   it "creates post" do
     login(user.email, user.password)
-    click_link("New Post")
-    fill_in 'Name', :with => 'My new post title'
-    fill_in 'Content', :with => '<p>Some dummy content with <a href="http://google.com" target="_blank">link.</a></p>'
-    fill_in 'Tags', :with => "tag1, tag2, tag3"
-    select '2012', :from => 'post[year]'
-    select '6', :from => 'post[month]'
-    select '22', :from => 'post[day]'
-    select 'photocontest', :from => 'Categories'
-    click_button 'Create Post'
+    create_post
     within("table") do
       page.should have_content("My new post title")
       page.should have_content("2012/06/22")
       page.should have_content("2012-06-22-my-new-post-title.html")
     end
+  end
+  
+  it "deletes a specific post", :js => true do
+    login(user.email, user.password)
+    create_post
+    page.should have_selector('table tr', :count => 5)
+    click_link("Delete")
+    page.driver.browser.switch_to.alert.accept
+    page.should_not have_content("First post")
+    page.should_not have_content("2009/01/23")
+    page.should_not have_content("2009-01-23-first-post.html")
+    page.should have_selector('table tr', :count => 4)
   end
 end
