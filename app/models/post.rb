@@ -8,7 +8,7 @@ class Post
   include ActiveAttr::TypecastedAttributes
   include ActiveAttr::MassAssignment
   
-  # attr_accessor :name, :content, :date, :url
+  #attr_accessor :name, :content, :date, :url
   
   attribute :id, :type => Integer
   attribute :name, :type => String
@@ -43,26 +43,55 @@ class Post
       @posts << { id: i,
                   date: File.basename(file).scan(/\d+-/).join("/").gsub!(/-/,""),
                   title: File.basename(file).split(/- */, 4).last.capitalize.gsub!(/\.html/, "").gsub!(/-/, " "), 
-                  url: [@dir, File.basename(file)].join("/")}
+                  url: [@dir, File.basename(file)].join("/"),
+                  published: File.exists?([ @publish_path, 
+                                             File.basename(file).scan(/\d+-/).join("/").gsub!(/-/,"").split("/"),
+                                             File.basename(file).split(/- */, 4).last.gsub!(/\.html/, ""),
+                                             "index.html"].join("/")) ? 1 : 0 }
     end
     return @posts
   end
   
   def self.find(id)
-    @posts = self.all
-    @posts.find do |p|
+    posts = self.all
+    posts.find do |p|
       if p[:id]  == id.to_i
         @post = Post.new
         @post.url = [@post.url, p[:url].gsub!(/(\/)+(\D*)/, "")].join("/")
         @post.id = p[:id].to_i
-        @post.year = p[:date].split("-").first
-        @post.month = p[:date].split("-")[1]
-        @post.day = p[:date].split("-").last
+        @post.year = p[:date].split("/").first
+        @post.month =  p[:date].split("/")[1]
+        @post.day = p[:date].split("/").last
         @post.name = p[:title]
-        return @post
+        @post.published = p[:published]
+        Post.load(@post)
+        # puts %Q{
+        #   categories: #{@post.categories}
+        #   rss: #{@post.rss}
+        #   comments: #{@post.comments}
+        #   tags: #{@post.tags}
+        #   content: #{@post.content}
+        #   }
       end
     end
+    return @post
   end
+  
+  
+  def self.load(post)
+    doc = Nokogiri::HTML(open(post.url))
+    yaml_front_matter = doc.xpath("//p").text.split(/-{3}/)[1]
+    layout = yaml_front_matter.scan(/layout:\s\w*/)[0].gsub(/layout:/, "")
+    post.categories = yaml_front_matter.scan(/categories:\s\w*/)[0].gsub(/categories:/,"").strip!
+    post.tags = yaml_front_matter.scan(/^-\W*+.*/).each {|t| t.gsub!(/-/,"").strip! }.join(", ")
+    rss = yaml_front_matter.scan(/rss:\s\w*/)[0].gsub(/rss:/,"").strip!
+    rss == "true" ? post.rss = 1 : post.rss = 0
+    comments = yaml_front_matter.scan(/comments:\s\w*/)[0].gsub(/comments:/,"").strip!
+    comments == "true" ? post.comments = 1 : post.comments = 0
+    doc.xpath("//p[1]").first.remove #remove the yaml front matter incapsulated in <p> tag by default
+    doc.children.each {|p| post.content = p} # cycle through remaining nodes
+  end
+  
   
   def save
     filename = "#{self.url}/#{self.date}-#{self.name.to_url}.html"
@@ -84,6 +113,15 @@ class Post
     end
   end
   
+  
+  def update_attributes(values)
+    @data = {}
+    values.each do |key,value|
+      @data[key.to_s] = value
+    end
+    puts @data
+  end
+  
   def destroy
     #puts "Deleting post: #{self.url}"
     File.delete(self.url)
@@ -102,5 +140,10 @@ class Post
   def self.load_path
     @dir = [@config[Rails.env]["relative_blog_path"], @config[Rails.env]["posts_path"]].join("/")
   end
+  
+  def self.published_path
+    @publish_path = @config[Rails.env]["published_path"]
+  end
+  
   
 end

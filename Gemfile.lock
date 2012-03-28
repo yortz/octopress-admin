@@ -187,6 +187,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   mysql2
+  nokogiri
   rails (= 3.2.2)
   rspec-rails (~> 2.6)
   sass-rails (~> 3.2.3)

@@ -13,6 +13,10 @@ class PostsController < ApplicationController
     @post = Post.new
   end
   
+  def edit
+    @post = Post.find(params[:id])
+  end
+  
   def create
     @post = Post.new(params[:post])
 
@@ -23,6 +27,21 @@ class PostsController < ApplicationController
         format.json { render json: @post, status: :created, location: @post }
       else
         format.html { render action: "new" }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def update
+    @post = Post.find(params[:id])
+
+    respond_to do |format|
+      if @post.update_attributes(params[:post]) && @post.valid?
+        #@post.save
+        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
@@ -43,6 +62,7 @@ class PostsController < ApplicationController
   def load_config
     Post.load_config
     Post.load_path
+    Post.published_path
   end
   
 end

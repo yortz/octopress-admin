@@ -1,1 +1,6 @@
 <h1><%= @post.name %></h1>
+<p class="content"><%= raw @post.content %></p>
+<h3>Posted on <%= @post.date %> in <%= @post.categories %></h3>
+<h3>Tagged <%= @post.tags %></h3>
+<h3>Comments: <%= @post.comments %> | Rss: <%= @post.rss %> | Published: <%= @post.published %></h3>
+

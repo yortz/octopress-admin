@@ -44,6 +44,7 @@ describe "Posts" do
       click_link("Show")
     end
     page.should have_content("First post")
+    page.should have_content("Some dummy content with html")
   end
   
   it "shows new post" do
@@ -69,15 +70,25 @@ describe "Posts" do
     end
   end
   
-  it "deletes a specific post", :js => true do
+  # it "deletes a specific post", :js => true do
+  #   login(user.email, user.password)
+  #   create_post
+  #   page.should have_selector('table tr', :count => 5)
+  #   click_link("Delete")
+  #   page.driver.browser.switch_to.alert.accept
+  #   page.should_not have_content("First post")
+  #   page.should_not have_content("2009/01/23")
+  #   page.should_not have_content("2009-01-23-first-post.html")
+  #   page.should have_selector('table tr', :count => 4)
+  # end
+  
+  it "updates a post" do
     login(user.email, user.password)
-    create_post
-    page.should have_selector('table tr', :count => 5)
-    click_link("Delete")
-    page.driver.browser.switch_to.alert.accept
-    page.should_not have_content("First post")
-    page.should_not have_content("2009/01/23")
-    page.should_not have_content("2009-01-23-first-post.html")
-    page.should have_selector('table tr', :count => 4)
+    click_link("Edit")
+    page.should have_content("Edit post")
+    within("form") do
+      page.should have_content("First post")
+    end
+    fill_in 'Name', :with => 'Edit my first post'
   end
 end

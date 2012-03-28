@@ -46,18 +46,25 @@ content: %Q{<h1>Third post</h1>
     select '6', :from => 'post[month]'
     select '22', :from => 'post[day]'
     select 'photocontest', :from => 'Categories'
-    click_button 'Create Post'
+    click_button 'Submit'
   end
 
   def generate_posts(path)
     POSTS.each do |post|
       filename = "#{path}/#{post.first}"
+      year = post.first.scan(/\d{4}/).first
+      month = post.first.scan(/-\d{2}-/).first.gsub(/-/,"")
+      day = post.first.scan(/-{1}\d{2}-{1}\D{1}/).first.gsub(/\D/,"")
+      title = post.first.scan(/[a-z]+-{1}+[a-z]*/).first
+      publish_path = [Post.published_path, year, month, day, title].join("/").strip
+      FileUtils.mkdir_p(publish_path)
       #puts "Creating new post: #{filename}"
       open(filename, 'w') do |file|
         post.last.values.each do |value|
           file.puts "#{value}\n\n"
         end
       end
+      File.open([publish_path, "index.html"].join("/"), 'w') {|f| f.write(post.last[:content]) }
     end
   end
   
@@ -65,17 +72,8 @@ content: %Q{<h1>Third post</h1>
     Dir["#{path}/" + "*.html"].each do |file|
       #puts "Deleting: #{file}"
       File.delete(file)
-    end 
-  end
-  
-  def get_posts
-    @posts = []
-    Dir[File.join(Post.load_path, "*.html")].each_with_index do |file, i|
-      @posts << { id: i,
-                  date: File.basename(file).scan(/\d+-/).join("/").gsub!(/-/,""),
-                  title: File.basename(file).split(/- */, 4).last.capitalize.gsub!(/\.html/, "").gsub!(/-/, " "), 
-                  url: File.basename(file)}
     end
+    Dir.glob([Post.published_path, "**"].join("/")).each { |d| FileUtils.rm_rf d }
   end
   
   def new_post(name, date, content, categories, tags)

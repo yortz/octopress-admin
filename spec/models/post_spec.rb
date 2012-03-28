@@ -45,13 +45,18 @@ describe Post do
     end
     
     it "returns a list of the posts" do
-      get_posts
+      @posts = Post.all
       @posts.count.should eq(3)
       @posts.first.class.should eq(Hash.new.class)
-      @posts.first.should eq({:id=>0, :date=>"2009/01/23", :title=>"First post", :url=>"2009-01-23-first-post.html"})
+      @posts.first.should eq({ :id=>0, 
+                               :date=>"2009/01/23", 
+                               :title=>"First post", 
+                               :url=>"/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2009-01-23-first-post.html",
+                               :published => 1 })
       @posts.first[:date].should eq("2009/01/23")
       @posts.first[:title].should eq("First post")
-      @posts.first[:url].should eq("2009-01-23-first-post.html")
+      @posts.first[:url].should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2009-01-23-first-post.html")
+      @posts.first[:published].should eq(1)
     end
     
     it "finds the post by id" do
@@ -60,6 +65,12 @@ describe Post do
       @post.name.should eq("First post")
       @post.id.should eq(0)
       @post.url.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2009-01-23-first-post.html")
+      @post.categories.should eq("news")
+      @post.tags.should eq("news, events")
+      @post.rss.should eq(1)
+      @post.comments.should eq(1)
+      @post.published.should eq(1)
+      @post.content.should eq("<html><body>\n<h1>First post</h1>\n<p>Some dummy content with html <a href=\"http://google.com\" target=\"_blank\">link.</a></p>\n</body></html>")
     end
   
     it "creates new post" do
@@ -85,7 +96,7 @@ describe Post do
     it "deletes an unpuplished post" do
       @post = Post.find(1)
       @post.destroy
-      get_posts
+      @posts = Post.all
       @posts.count.should eq(2)
     end
     
