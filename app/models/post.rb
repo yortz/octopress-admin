@@ -65,13 +65,6 @@ class Post
         @post.name = p[:title]
         @post.published = p[:published]
         Post.load(@post)
-        # puts %Q{
-        #   categories: #{@post.categories}
-        #   rss: #{@post.rss}
-        #   comments: #{@post.comments}
-        #   tags: #{@post.tags}
-        #   content: #{@post.content}
-        #   }
       end
     end
     return @post
@@ -97,29 +90,24 @@ class Post
     filename = "#{self.url}/#{self.date}-#{self.name.to_url}.html"
     unless File.exist?(filename)
       #puts "Creating new post: #{filename}"
-      open(filename, 'w') do |post|
-        post.puts "---"
-        post.puts "layout: post"
-        post.puts "title: \"#{self.name.gsub(/&/,'&amp;')}\""
-        post.puts "date: #{self.date}"
-        post.puts self.comments == 1 ? "comments: true" : "comments: false"
-        post.puts self.rss == 1 ? "rss: true" : "rss: false"
-        post.puts "categories: #{self.categories}"
-        post.puts "tags:\n- #{self.tags.gsub(/,/, "\n-")}"
-        post.puts "---"
-        post.puts "\n"
-        post.puts "#{self.content}"
-      end
+      write(filename)
     end
   end
   
   
   def update_attributes(values)
-    @data = {}
-    values.each do |key,value|
-      @data[key.to_s] = value
-    end
-    puts @data
+    values.each { |k,v| self.send "#{k}=", v }
+    temp_file = Tempfile.new("#{self.date}-#{self.name.to_url}.html")
+    write(temp_file)
+    FileUtils.mv(temp_file.path, self.url)
+    new_file_name = "#{self.url.gsub(/\/{1}\d.*./, '')}/#{self.date}-#{self.name.to_url}.html"
+    File.rename(self.url, new_file_name )
+    self.url = new_file_name
+    # values.each { |k,v| self.send "#{k}=", v }
+    # destroy
+    # filename = "#{self.url.gsub(/\/{1}\d.*./, '')}/#{self.date}-#{self.name.to_url}.html"
+    # write(filename) unless File.exist?(filename)
+    # self.url = filename
   end
   
   def destroy
@@ -145,5 +133,22 @@ class Post
     @publish_path = @config[Rails.env]["published_path"]
   end
   
+  private
+    
+    def write(filename)
+      open(filename, 'w') do |post|
+        post.puts "---"
+        post.puts "layout: post"
+        post.puts "title: \"#{self.name.gsub(/&/,'&amp;')}\""
+        post.puts "date: #{self.date}"
+        post.puts self.comments == 1 ? "comments: true" : "comments: false"
+        post.puts self.rss == 1 ? "rss: true" : "rss: false"
+        post.puts "categories: #{self.categories}"
+        post.puts "tags:\n- #{self.tags.gsub(/,/, "\n-")}"
+        post.puts "---"
+        post.puts "\n"
+        post.puts "#{self.content}"
+      end
+    end
   
 end

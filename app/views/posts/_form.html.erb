@@ -1,53 +1,51 @@
-<%= form_for(@post) do |f| %>
-  <% if @post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+<% if @post.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
 
-      <ul>
-      <% @post.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :date %>
-    <% if @post.year? && @post.month? && @post.day? %>
-      <%= select_date Date.parse(@post.date), :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
-    <% else %>
-      <%= select_date Time.now, :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
+    <ul>
+    <% @post.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
     <% end %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
-  </div>
-  <div class="field">
-    <%= f.label :categories %><br />
-    <%= f.select :categories, Post.load_categories, :include_blank => true %>
-  </div>
-  <div class="field">
-    <%= f.label :tags %>
-    <%= f.text_field :tags %>
-  </div>
-  <div class="field">
-    <%= f.label :published %><br />
-    <%= f.check_box :published  %>
-  </div>
-  <div class="field">
-    <%= f.label :comments %><br />
-    <%= f.check_box :comments %>
-  </div>
-  <div class="field">
-    <%= f.label :rss %><br />
-    <%= f.check_box :rss %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Submit" %>
+    </ul>
   </div>
 <% end %>
+
+<div class="field">
+  <%= f.label :name %><br />
+  <%= f.text_field :name %>
+</div>
+<div class="field">
+  <%= f.label :date %>
+  <% if @post.year? && @post.month? && @post.day? %>
+    <%= select_date Date.parse(@post.date), :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
+  <% else %>
+    <%= select_date Time.now, :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
+  <% end %>
+</div>
+<div class="field">
+  <%= f.label :content %><br />
+  <%= f.text_area :content %>
+</div>
+<div class="field">
+  <%= f.label :categories %><br />
+  <%= f.select :categories, Post.load_categories, :include_blank => true %>
+</div>
+<div class="field">
+  <%= f.label :tags %>
+  <%= f.text_field :tags %>
+</div>
+<div class="field">
+  <%= f.label :published %><br />
+  <%= f.check_box :published  %>
+</div>
+<div class="field">
+  <%= f.label :comments %><br />
+  <%= f.check_box :comments %>
+</div>
+<div class="field">
+  <%= f.label :rss %><br />
+  <%= f.check_box :rss %>
+</div>
+<div class="actions">
+  <%= f.submit "Submit" %>
+</div>

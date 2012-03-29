@@ -90,5 +90,10 @@ describe "Posts" do
       page.should have_content("First post")
     end
     fill_in 'Name', :with => 'Edit my first post'
+    click_button 'Submit'
+    page.should_not have_content("First post")
+    page.should_not have_content("2009-01-23-first-post.html")
+    page.should have_content("Edit my first post")
+    page.should have_content("2009-01-23-edit-my-first-post.html")
   end
 end

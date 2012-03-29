@@ -72,7 +72,7 @@ describe Post do
       @post.published.should eq(1)
       @post.content.should eq("<html><body>\n<h1>First post</h1>\n<p>Some dummy content with html <a href=\"http://google.com\" target=\"_blank\">link.</a></p>\n</body></html>")
     end
-  
+      
     it "creates new post" do
       @categories = Post.load_categories
       new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "#{@categories.last}", "great, awesome, even better")
@@ -84,7 +84,7 @@ describe Post do
       @post.categories.should eq("photocontest")
       @post.tags.should eq("great, awesome, even better")
     end
-  
+      
     it "saves new post and creates the post in the correct folder" do
       @categories = Post.load_categories
       new_post("new post", "2001-03-14", "<p>This is a <a href=\"http://google.com\">link<a/> post</p>", "#{@categories.first}", "great, awesome, even better")
@@ -98,6 +98,26 @@ describe Post do
       @post.destroy
       @posts = Post.all
       @posts.count.should eq(2)
+    end
+    
+    it "updates a post" do
+      @post = Post.find(1)
+      values = { name: "edit test post",
+                 year: "2012", 
+                 month: "3",
+                 day: "29", 
+                 content: "<html><body>this is an edit content</body></html>",
+                 categories: "events",
+                 tags: "photocontest",
+                 published: 0,
+                 comments: 1,
+                 rss: 1}
+      @post.update_attributes(values)
+      @post.name.should eq("edit test post")
+      @post.content.should eq("<html><body>this is an edit content</body></html>")
+      @post.categories.should eq("events")
+      @post.tags.should eq("photocontest")
+      @post.url.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2012-03-29-edit-test-post.html")
     end
     
   end
