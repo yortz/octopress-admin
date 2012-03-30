@@ -1,12 +1,7 @@
 class Post
   YML = File.join(Rails.root,"config","config.yml")
   
-  include ActiveAttr::BasicModel
-  include ActiveAttr::Attributes
-  include ActiveAttr::AttributeDefaults
-  include ActiveAttr::QueryAttributes
-  include ActiveAttr::TypecastedAttributes
-  include ActiveAttr::MassAssignment
+  include ActiveAttr::Model
   
   #attr_accessor :name, :content, :date, :url
   
@@ -63,7 +58,6 @@ class Post
         @post.month =  p[:date].split("/")[1]
         @post.day = p[:date].split("/").last
         @post.name = p[:title]
-        @post.published = p[:published]
         Post.load(@post)
       end
     end
@@ -81,6 +75,8 @@ class Post
     rss == "true" ? post.rss = 1 : post.rss = 0
     comments = yaml_front_matter.scan(/comments:\s\w*/)[0].gsub(/comments:/,"").strip!
     comments == "true" ? post.comments = 1 : post.comments = 0
+    published = yaml_front_matter.scan(/published:\s\w*/)[0].gsub(/published:/,"").strip!
+    published == "true" ? post.published = 1 : post.published = 0
     doc.xpath("//p[1]").first.remove #remove the yaml front matter incapsulated in <p> tag by default
     doc.children.each {|p| post.content = p} # cycle through remaining nodes
   end
@@ -103,16 +99,14 @@ class Post
     new_file_name = "#{self.url.gsub(/\/{1}\d.*./, '')}/#{self.date}-#{self.name.to_url}.html"
     File.rename(self.url, new_file_name )
     self.url = new_file_name
-    # values.each { |k,v| self.send "#{k}=", v }
-    # destroy
-    # filename = "#{self.url.gsub(/\/{1}\d.*./, '')}/#{self.date}-#{self.name.to_url}.html"
-    # write(filename) unless File.exist?(filename)
-    # self.url = filename
   end
   
   def destroy
     #puts "Deleting post: #{self.url}"
     File.delete(self.url)
+  end
+  
+  def self.generate_site
   end
   
   def self.load_config(config=YML)
@@ -141,6 +135,7 @@ class Post
         post.puts "layout: post"
         post.puts "title: \"#{self.name.gsub(/&/,'&amp;')}\""
         post.puts "date: #{self.date}"
+        post.puts self.published == 1 ? "published: true" : "published: false"
         post.puts self.comments == 1 ? "comments: true" : "comments: false"
         post.puts self.rss == 1 ? "rss: true" : "rss: false"
         post.puts "categories: #{self.categories}"

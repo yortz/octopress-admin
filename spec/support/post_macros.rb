@@ -4,6 +4,7 @@ POSTS = [["2009-01-23-first-post.html", { yml_frontmatter: %Q{---
 layout: post
 title: First Post
 categories: news
+published: true
 rss: true
 comments: true
 tags:
@@ -16,6 +17,7 @@ content: %Q{<h1>First post</h1>
 layout: post
 title: Second Post
 categories: events
+published: false
 rss: true
 comments: true
 tags:
@@ -29,6 +31,7 @@ content: %Q{<h1>Second post</h1>
 layout: post
 title: Third Post
 categories: projects
+published: false
 rss: true
 comments: true
 tags:

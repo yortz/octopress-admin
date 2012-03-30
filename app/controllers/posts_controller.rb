@@ -57,6 +57,14 @@ class PostsController < ApplicationController
     end
   end
   
+  def generate_site
+    Post.generate_site
+    respond_to do |format|
+      format.html { redirect_to posts_url }
+      format.json { head :no_content }
+    end
+  end
+  
   private
   
   def load_config

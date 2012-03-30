@@ -109,7 +109,7 @@ describe Post do
                  content: "<html><body>this is an edit content</body></html>",
                  categories: "events",
                  tags: "photocontest",
-                 published: 0,
+                 published: 1,
                  comments: 1,
                  rss: 1}
       @post.update_attributes(values)

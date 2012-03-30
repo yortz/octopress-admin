@@ -23,4 +23,4 @@
 
 <br />
 
-<%= link_to 'New Post', new_post_path %>
+<%= link_to 'New Post', new_post_path %> | <%= link_to 'Generate Site', generate_site_posts_path, confirm: "This will generate the website according to the post published status in the yaml front matter.\n Do you want to continue?", :method => :get %>
