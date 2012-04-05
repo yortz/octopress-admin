@@ -8,27 +8,25 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'capistrano'
 gem 'stringex'
 gem 'nokogiri'
-
-#octopress 
-
-gem 'rake'
-gem 'rack'
-gem 'jekyll', :git => "git@github.com:yortz/jekyll.git", :branch => "edge"
-gem 'rdiscount'
-gem 'pygments.rb'
-gem 'RedCloth'
-gem 'haml', '>= 3.1'
-gem 'compass', '>= 0.11'
-gem 'rubypants'
-gem 'rb-fsevent'
-gem 'stringex'
-gem 'liquid', '2.2.2'
-gem 'mini_magick'
-
 gem 'delayed_job_active_record'
 gem 'will_paginate'
 gem "delayed_job_admin", :git => "git://github.com/dje29/delayed_job_admin.git"
 
+group :octopress do
+  gem 'rake'
+  gem 'rack'
+  gem 'jekyll', :git => "git@github.com:yortz/jekyll.git", :branch => "edge"
+  gem 'rdiscount'
+  gem 'pygments.rb'
+  gem 'RedCloth'
+  gem 'haml', '>= 3.1'
+  gem 'compass', '>= 0.11'
+  gem 'rubypants'
+  gem 'rb-fsevent'
+  gem 'stringex'
+  gem 'liquid', '2.2.2'
+  gem 'mini_magick'
+end
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

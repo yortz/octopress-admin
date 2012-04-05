@@ -32,8 +32,18 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
   
-  [AuthenticationMacros, PostMacros].each do |macro|
+  [AuthenticationMacros, PostMacros, DelayedJobMacros].each do |macro|
     config.include(macro)
+  end
+  
+  unless File.directory?([Rails.root, "spec/data/blog"].join("/"))
+    octopress_test_dir = [Rails.root, "spec/data"].join("/")
+    git_path = "/usr/local/git/bin/git"
+    octopress_install = "blog"
+    puts "Cloning repo"
+    system "cd #{octopress_test_dir};#{git_path} clone git://github.com/imathis/octopress.git #{octopress_install}"
+    puts "scaffolding octopress install"
+    system "cd #{octopress_test_dir}/#{octopress_install}; rake install"
   end
 
 end
