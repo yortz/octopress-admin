@@ -17,3 +17,4 @@ db/seeds.rb
 controllers/default_scaffold.rb
 views/default_scaffold
 .rvmrc
+spec/data/blog
