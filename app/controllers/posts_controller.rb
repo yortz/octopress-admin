@@ -58,9 +58,9 @@ class PostsController < ApplicationController
   end
   
   def generate_site
-    Post.generate_site
+    Post.delay.generate_site
     respond_to do |format|
-      format.html { redirect_to posts_url }
+      format.html { redirect_to posts_url, notice: 'Generating website.' }
       format.json { head :no_content }
     end
   end
