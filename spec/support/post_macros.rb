@@ -79,6 +79,10 @@ content: %Q{<h1>Third post</h1>
     Dir.glob([Post.published_path, "**"].join("/")).each { |d| FileUtils.rm_rf d }
   end
   
+  def delete_jobs
+    Delayed::Job.each {|job| job.destroy}
+  end
+  
   def new_post(name, date, content, categories, tags)
     @post = Post.new( :name => name, :year => date.split("-").first, :month => date.split("-")[1], :day => date.split("-").last, :content => content, :categories => categories, :tags => tags )
   end

@@ -120,6 +120,25 @@ describe Post do
       @post.url.should eq("/Users/yortz/projects/octopress-admin/spec/data/blog/source/_posts/2012-03-29-edit-test-post.html")
     end
     
+    it "generates the website" do
+      @post = Post.find(1)
+      values = { name: "edit test post",
+                 year: "2012", 
+                 month: "3",
+                 day: "29", 
+                 content: "<html><body>this is an edit content</body></html>",
+                 categories: "events",
+                 tags: "photocontest",
+                 published: 1,
+                 comments: 1,
+                 rss: 1}
+      @post.update_attributes(values)
+      Post.delay.generate_site
+      Delayed::Job.count.should eq(1)
+      work_off
+      File.exists?([Post.published_path, @post.date.gsub(/-/, "/"), @post.name.to_url, "index.html"].join("/")).should eq(true)
+    end
+    
   end
   
 end

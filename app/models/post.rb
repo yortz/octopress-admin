@@ -107,7 +107,6 @@ class Post
   end
   
   def self.generate_site
-    puts "## Generating Site with Jekyll"
     path = @config[Rails.env]["relative_blog_path"]
     system "cd #{path} && rake generate"
   end
