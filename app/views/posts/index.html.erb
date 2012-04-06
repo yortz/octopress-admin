@@ -1,24 +1,27 @@
 <h1>Listing Posts</h1>
-<table>
-  <tr>
-    <th>Date</th>
-    <th>Title</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @posts.each do |post| %>
-  <tr>
-    <td><%= post[:date] %></td>
-    <td><%= post[:title] %></td>
-    <td><%= link_to 'Show', post_path(post[:id]) %></td>
-    <td><%= link_to 'Edit', edit_post_path(post[:id]) %></td>
-    <td><%= link_to 'Delete', post_path(post[:id]), confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Title</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post[:date] %></td>
+        <td><%= post[:title] %></td>
+        <td><%= link_to 'Show', post_path(post[:id]), :class => 'btn btn-mini' %></td>
+        <td><%= link_to 'Edit', edit_post_path(post[:id]), :class => 'btn btn-mini' %></td>
+        <td><%= link_to 'Delete', post_path(post[:id]), confirm: 'Are you sure?', method: :delete, :class => 'btn btn-mini btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
-<%= will_paginate @posts %>
+<%= will_paginate @posts, :renderer => BootstrapPagination::Rails %>
 <br />
 
-<%= link_to 'New Post', new_post_path %> | <%= link_to 'Generate Site', generate_site_posts_path, confirm: "This will generate the website according to the post published status in the yaml front matter.\n Do you want to continue?", :method => :get %>
+<%= link_to 'New Post', new_post_path, :class => 'btn btn-primary' %> <%= link_to 'Generate Site', generate_site_posts_path, confirm: "This will generate the website according to the post published status in the yaml front matter.\n Do you want to continue?", :method => :get, :class => 'btn btn-primary btn-danger' %>

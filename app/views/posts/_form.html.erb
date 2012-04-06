@@ -10,42 +10,60 @@
   </div>
 <% end %>
 
-<div class="field">
-  <%= f.label :name %><br />
-  <%= f.text_field :name %>
+<div class="control-group">
+  <%= f.label :name, :class => 'control-label' %>
+  <div class="controls">
+    <%= f.text_field :name %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :date %>
-  <% if @post.year? && @post.month? && @post.day? %>
-    <%= select_date Date.parse(@post.date), :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
-  <% else %>
-    <%= select_date Time.now, :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
-  <% end %>
+<div class="control-group">
+  <%= f.label :date, :class => 'control-label' %>
+  <div class="controls">
+    <% if @post.year? && @post.month? && @post.day? %>
+      <%= select_date Date.parse(@post.date), :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
+    <% else %>
+      <%= select_date Time.now, :order => [:year, :month, :day], :prefix => 'post', :use_month_numbers => true %>
+    <% end %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :content %><br />
-  <%= f.text_area :content %>
+<div class="control-group">
+  <%= f.label :content, :class => 'control-label' %>
+  <div class="controls">
+    <%= f.text_area :content, :class => 'span7' %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :categories %><br />
-  <%= f.select :categories, Post.load_categories, :include_blank => true %>
+<div class="control-group">
+  <%= f.label :categories, :class => 'control-label' %>
+  <div class="controls">
+    <%= f.select :categories, Post.load_categories, :include_blank => true, :class => 'span1' %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :tags %>
-  <%= f.text_field :tags %>
+<div class="control-group">
+  <%= f.label :tags, :class => 'control-label' %>
+  <div class="controls">
+    <%= f.text_field :tags, :class => 'span3' %>
+    <span class="help-inline">Separeted by commas (eg: tag1, tag2, tag3)</span>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :published %><br />
-  <%= f.check_box :published  %>
+<div class="control-group">
+  <%= f.label :published, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.check_box :published %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :comments %><br />
-  <%= f.check_box :comments %>
+<div class="control-group">
+  <%= f.label :comments, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.check_box :comments %>
+  </div>
 </div>
-<div class="field">
-  <%= f.label :rss %><br />
-  <%= f.check_box :rss %>
+<div class="control-group">
+  <%= f.label :rss, :class => 'control-label' %>
+  <div class='controls'>
+    <%= f.check_box :rss %>
+  </div>
 </div>
-<div class="actions">
-  <%= f.submit "Submit" %>
+<div class="form-actions">
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")), :class => 'btn btn-danger' %>
 </div>

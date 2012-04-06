@@ -1,6 +1,6 @@
 <h1>Edit post</h1>
 
-<%= form_for(@post, :url => { :action => "update" }, :html => { :method => "put" }) do |f| %>
+<%= form_for(@post, :url => { :action => "update" }, :html => { :class => 'form-horizontal', :method => "put" }) do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
 <% end %>
 

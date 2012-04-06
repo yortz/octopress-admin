@@ -10,6 +10,7 @@ gem 'stringex'
 gem 'nokogiri'
 gem 'delayed_job_active_record'
 gem 'will_paginate', '~> 3.0'
+gem 'will_paginate-bootstrap'
 gem "delayed_job_admin", :git => "git://github.com/dje29/delayed_job_admin.git"
 
 group :octopress do
