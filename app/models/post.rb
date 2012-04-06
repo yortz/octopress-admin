@@ -129,6 +129,10 @@ class Post
     @publish_path = @config[Rails.env]["published_path"]
   end
   
+  def self.load_defaults
+    return @config["site"]
+  end
+  
   private
     
     def write(filename)

@@ -65,12 +65,5 @@ class PostsController < ApplicationController
     end
   end
   
-  private
-  
-  def load_config
-    Post.load_config
-    Post.load_path
-    Post.published_path
-  end
   
 end

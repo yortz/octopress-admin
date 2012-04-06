@@ -1,6 +1,34 @@
-<h1><%= @post.name %></h1>
-<p class="content"><%= raw @post.content %></p>
-<h3>Posted on <%= @post.date %> in <%= @post.categories %></h3>
-<h3>Tagged <%= @post.tags %></h3>
-<h3>Comments: <%= @post.comments %> | Rss: <%= @post.rss %> | Published: <%= @post.published %></h3>
+<div class="page-header">
+  <h1><%= @post.name %> <br /><small>on <%= @post.date %> in <%= @post.categories %> | tagged <%= @post.tags %></small></h1> 
+</div>
+<p>
+  <%= raw @post.content %>
+</p>
+
+<p>
+Comments
+<% if @post.comments == 1 %>
+  <i class="icon-ok-circle"></i> 
+<% else %>
+  <i class="icon-ban-circle"></i> 
+<% end %>
+Rss
+<% if @post.rss == 1 %>
+  <i class="icon-ok-circle"></i> 
+<% else %>
+  <i class="icon-ban-circle"></i> 
+<% end %> 
+Published
+<% if @post.published == 1 %>
+  <i class="icon-ok-circle"></i> 
+<% else %>
+  <i class="icon-ban-circle"></i> 
+<% end %>
+</p>
+
+<div class="form-actions">
+  <%= link_to 'Back', posts_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_post_path(@post[:id]), :class => 'btn' %>
+  <%= link_to 'Delete', post_path(@post[:id]), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>
 

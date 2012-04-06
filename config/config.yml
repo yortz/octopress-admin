@@ -13,3 +13,7 @@ categories:
   - category_1: events
   - category_2: news
   - category_3: photocontest
+  
+site:
+  title: Octopress Admin
+  website: http://mydomain.com
