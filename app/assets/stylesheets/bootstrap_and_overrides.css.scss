@@ -1,0 +1,9 @@
+// Set the correct sprite paths
+$iconSpritePath: image-path('glyphicons-halflings.png');
+$iconWhiteSpritePath: image-path('glyphicons-halflings-white.png');
+
+@import "bootstrap";
+
+body{padding-top:80px;}
+
+@import "bootstrap-responsive";

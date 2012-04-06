@@ -37,7 +37,7 @@ group :assets do
   # gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
-  gem 'twitter-bootstrap-rails'
+  gem 'bootstrap-sass', '2.0.1' #momentarily sticking with 2.0.1 due to icon display issue
 end
 
 gem "rspec-rails", "~> 2.6", :group => [:test, :development]
