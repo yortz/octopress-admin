@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   before_filter :authorize, :load_config
   
   def index
-    @posts = Post.all
+    @posts = Post.all.paginate(:page => params[:page], :per_page => 10)
   end
   
   def show
