@@ -129,8 +129,8 @@ class Post
     @publish_path = @config[Rails.env]["published_path"]
   end
   
-  def self.load_defaults
-    return @config["site"]
+  def self.load_default(arg)
+    return @arg = @config["site"][arg]
   end
   
   private

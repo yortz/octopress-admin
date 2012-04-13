@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :load_config
   
   def delayed_job_admin_authentication
     authorize
@@ -11,7 +12,7 @@ class ApplicationController < ActionController::Base
     Post.load_config
     Post.load_path
     Post.published_path
-    @site = Post.load_defaults
+    @title = Post.load_default("title")
   end
 
   def current_user
