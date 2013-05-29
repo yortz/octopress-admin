@@ -13,7 +13,7 @@ This is a simple rails 3 app, so cd into the app dir and
 <pre>
   <code>
     $: bundle install       #install required gems
-    $: rake db:create:all   #create dbs
+    $: rake db:create       #create dbs
     $: rake db:migrate      #migrate db
     $: rails s              #start app
   </code>
