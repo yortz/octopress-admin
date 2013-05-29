@@ -20,7 +20,7 @@ GIT
       maruku (>= 0.5.9)
 
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     RedCloth (4.2.9)
     actionmailer (3.2.2)
